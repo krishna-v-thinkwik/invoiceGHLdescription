@@ -10,8 +10,8 @@ app = Flask(__name__)
 # Setup Google Sheets API
 SERVICE_ACCOUNT_JSON = os.environ.get('SERVICE_ACCOUNT_JSON')
 SCOPES = ['https://www.googleapis.com/auth/spreadsheets.readonly']
-SHEET_ID = '1sVuQGZjHToaryPNNSOytHNZPnGHFqzc2XfbDGsOxRSI'
-SHEET_NAME = 'PIZZAghl'
+SHEET_ID = '17mjosbO5z39dmwNvXUKnzh6a5zYn9nGJyA-Ez_9ZAGk'
+SHEET_NAME = 'PIZZAPRICE'
 
 if not SERVICE_ACCOUNT_JSON:
     raise Exception("SERVICE_ACCOUNT_JSON not found in environment variables")
@@ -24,7 +24,7 @@ sheet = service.spreadsheets()
 # Load item prices from sheet
 result = sheet.values().get(spreadsheetId=SHEET_ID, range=f"{SHEET_NAME}!A2:B").execute()
 data = result.get('values', [])
-item_prices = {row[0].strip().lower(): int(row[1]) for row in data}
+item_prices = {row[0].strip().lower(): float(row[1]) for row in data}
 
 # Parsing functions
 def parse_items(text):
