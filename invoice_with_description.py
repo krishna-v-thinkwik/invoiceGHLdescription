@@ -107,23 +107,8 @@ def calculate_price():
 
         total_price = base_price + topping_total
 
-        # Extract crust for labeling the base price
-        crust_desc = ""
-        if "cheese burst" in pizza:
-            crust_desc = "Cheese Burst Crust Price"
-        elif "fresh pan pizza" in pizza:
-            crust_desc = "Fresh Pan Pizza Crust Price"
-        elif "new hand tossed" in pizza:
-            crust_desc = "New Hand Tossed Crust Price"
-        elif "classic hand tossed" in pizza:
-            crust_desc = "Classic Hand Tossed Crust Price"
-        elif "thin crust" in pizza:
-            crust_desc = "Thin Crust Crust Price"
-        elif "gluten free" in pizza:
-            crust_desc = "Gluten Free Crust Price"
-        else:
-            crust_desc = "Base Price"
-
+        # Simplified description: always "Price($base_price)"
+        crust_desc = "Price"
         description = f"{crust_desc}(${base_price})"
         if topping_price_details:
             description += f" , Toppings : {', '.join(topping_price_details)}"
@@ -148,8 +133,6 @@ def calculate_price():
         })
 
     return jsonify(result)
-
-
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5000))
