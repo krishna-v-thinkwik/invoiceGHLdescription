@@ -58,10 +58,12 @@ def extract_size_crust(pizza_name):
         description_parts.append("Crust : New Hand Tossed")
     elif "classic hand tossed" in pizza_name:
         description_parts.append("Crust : Classic Hand Tossed")
-    elif "wheat thin crust" in pizza_name:
-        description_parts.append("Crust : Wheat Thin Crust")
+    elif "thin crust" in pizza_name:
+        description_parts.append("Crust : Thin Crust")
     elif "fresh pan pizza" in pizza_name:
         description_parts.append("Crust : Fresh Pan Pizza")
+    elif "gluten free crust" in pizza_name:
+        description_parts.append("Crust : Gluten Free")
 
     return " , ".join(description_parts)
 
@@ -85,31 +87,46 @@ def calculate_price():
 
     # Process pizzas
     for qty, pizza in parsed_pizzas:
+        pizza = pizza.strip()
         base_price = item_prices.get(pizza, 0)
         topping_list = []
 
-        # Match toppings to pizza by inclusion
+        # Match toppings to pizza
         for top_pizza_key in parsed_toppings:
             if top_pizza_key in pizza:
                 topping_list = parsed_toppings[top_pizza_key]
                 break
 
-        # Calculate topping prices individually
+        # Topping price calculation
         topping_price_details = []
         topping_total = 0
         for t in topping_list:
             t_price = item_prices.get(t, 0)
             topping_total += t_price
-            topping_price_details.append(f"{t}({t_price})")
+            topping_price_details.append(f"{t.title()}(${t_price})")
 
         total_price = base_price + topping_total
 
-        description = f"Base Price({base_price})"
-        size_crust_desc = extract_size_crust(pizza)
-        if size_crust_desc:
-            description += f" , {size_crust_desc}"
+        # Extract crust for labeling the base price
+        crust_desc = ""
+        if "cheese burst" in pizza:
+            crust_desc = "Cheese Burst Crust Price"
+        elif "fresh pan pizza" in pizza:
+            crust_desc = "Fresh Pan Pizza Crust Price"
+        elif "new hand tossed" in pizza:
+            crust_desc = "New Hand Tossed Crust Price"
+        elif "classic hand tossed" in pizza:
+            crust_desc = "Classic Hand Tossed Crust Price"
+        elif "thin crust" in pizza:
+            crust_desc = "Thin Crust Crust Price"
+        elif "gluten free" in pizza:
+            crust_desc = "Gluten Free Crust Price"
+        else:
+            crust_desc = "Base Price"
+
+        description = f"{crust_desc}(${base_price})"
         if topping_price_details:
-            description += f" , Toppings : {', '.join(topping_price_details).title()}"
+            description += f" , Toppings : {', '.join(topping_price_details)}"
 
         result.append({
             'name': pizza,
@@ -131,6 +148,7 @@ def calculate_price():
         })
 
     return jsonify(result)
+
 
 
 if __name__ == '__main__':
